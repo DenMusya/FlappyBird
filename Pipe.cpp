@@ -1,8 +1,7 @@
 #include "Pipe.h"
 
-Pipe::Pipe(Vector2 pivot, int32_t distanceBetween, int32_t width, int32_t height, uint32_t color) :
-           _upperRect(pivot, width, height, color),
-           _lowerRect(pivot + Vector2{ 0.0f, static_cast<float>(distanceBetween + height) }, width, height, color) {}
+Pipe::Pipe(Vector2 pivot, float distanceBetween, float width, float height)
+    : GameObject(pivot, width, height) {}
 
 void Pipe::draw() {
   _upperRect.draw();
@@ -18,18 +17,10 @@ bool Pipe::Disappeared() const {
   return _upperRect.GetPivot().x + _upperRect.GetWidth() < 0;
 }
 
-const Rectangle& Pipe::GetLowerRect() const {
-  return _lowerRect;
-}
+const Rectangle& Pipe::GetLowerRect() const { return _lowerRect; }
 
-const Rectangle& Pipe::GetUpperRect() const {
-  return _upperRect;
-}
+const Rectangle& Pipe::GetUpperRect() const { return _upperRect; }
 
-bool Pipe::IsFinished() const {
-  return _finished;
-}
+bool Pipe::IsFinished() const { return _finished; }
 
-void Pipe::Finish() {
-  _finished = true;
-}
+void Pipe::Finish() { _finished = true; }

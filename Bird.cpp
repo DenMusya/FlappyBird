@@ -1,35 +1,29 @@
 #include "Bird.h"
 
-Bird::Bird() :_body(Vector2{ SCREEN_WIDTH / 2.0f - 30 , SCREEN_HEIGHT / 2.0f - 30 }, 60, 60, Color::Yellow) {}
-
-void Bird::draw() {
-  _body.draw();
-}
-
-void Bird::move(Vector2 delta) {
-  _body.move(delta);
-}
+Bird::Bird(Vector2 pos, float width, float height, float colliderRadius)
+    : GameObject(pos, width, height,
+                 std::make_unique<Collider::CircleCollider>(colliderRadius)) {}
 
 bool Bird::OnCollision(const Pipe& pipe) const {
-  return _body.OnCollision(pipe.GetLowerRect()) || _body.OnCollision(pipe.GetUpperRect());
+  /*return GetCollider()->Intersects(pipe.GetLowerRect().GetCollider()) ||
+         GetCollider()->Intersects(pipe.GetUpperRect().GetCollider());*/
 }
 
 bool Bird::IsFinished(Pipe& pipe) {
   if (pipe.IsFinished()) return false;
 
-  if (_body.GetPivot().x > pipe.GetLowerRect().GetPivot().x + pipe.GetLowerRect().GetWidth()) {
+  if (_body.GetPivot().x >
+      pipe.GetLowerRect().GetPivot().x + pipe.GetLowerRect().GetWidth()) {
     pipe.Finish();
     return true;
   }
-
 
   return false;
 }
 
 bool Bird::OutMap() {
-  return !_body.OnCollision(Rectangle(Vector2{ 0,0 }, SCREEN_WIDTH, SCREEN_HEIGHT, Color::Blue));
+  return GetPos().y > SCREEN_HEIGHT || GetPos().y + GetHeight() < 0;
 }
-
 
 void Bird::update(float dt) {
   _velocityY += _gravity * dt;
@@ -38,9 +32,7 @@ void Bird::update(float dt) {
     _velocityY = _terminalVelocity;
   }
 
-  _body.move(Vector2{ 0, _velocityY * dt });
+  Move(Vector2{0, _velocityY * dt});
 }
 
-void Bird::Jump() {
-  _velocityY = -_jumpForce;
-}
+void Bird::Jump() { _velocityY = -_jumpForce; }

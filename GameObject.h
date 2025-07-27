@@ -1,41 +1,52 @@
 #pragma once
 #include <memory>
+#include <vector>
 
-// #include "Collider.h"
 #include "Utils.h"
 
-namespace Collider {
-class BaseCollider;
-}
+class Component;
 
 class GameObject : std::enable_shared_from_this<GameObject> {
  public:
-  GameObject(Vector2 pos, float width, float height,
-             std::unique_ptr<Collider::BaseCollider> collider);
+  GameObject(Vector2 pos, float width, float height);
 
   void Move(Vector2 vec);
   void Rotate(float angle);
-  void Init();
   std::shared_ptr<GameObject> GetPtr();
-  const std::unique_ptr<Collider::BaseCollider>& GetCollider() const;
 
-  Vector2 GetPos() const;
+  void AddChild(std::shared_ptr<GameObject> child);
+
+  Vector2 GetLocalPos() const;
   float GetWidth() const;
   float GetHeight() const;
-  float GetRotation() const;
+  float GetLocalRotation() const;
+  const std::vector<std::shared_ptr<GameObject>>& GetChilds() const;
 
-  void SetPos(Vector2 pos);
+  Vector2 GetGlobalPos() const;
+  float GetGlobalRotation() const;
+
+  void SetParent(std::shared_ptr<GameObject> parent);
+  void SetLocalPos(Vector2 pos);
+  void SetLocalRotation(float angle);
   void SetWidth(float width);
   void SetHeight(float height);
-  void SetRotation(float angle);
 
-  virtual ~GameObject() = default;
+  template <typename T, typename... Args>
+  void AddComponent(Args&&... args);
+
+  template <typename T>
+  T* GetComponent() const;
 
  private:
   Vector2 _pos;
+  float _angle;  // rads
+  // float _scale; // maybe later
+
   float _width;
   float _height;
-  float _angle;  // rads
 
-  std::unique_ptr<Collider::BaseCollider> _collider;
+  std::weak_ptr<GameObject> _parent;
+  std::vector<std::shared_ptr<GameObject>> _childs;
+
+  std::vector<std::unique_ptr<Component>> _components;
 };

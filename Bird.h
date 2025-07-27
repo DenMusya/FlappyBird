@@ -1,18 +1,16 @@
 #pragma once
-#include "Rectangle.h"
-#include "Movable.h"
+#include "Collider.h"
 #include "Drawable.h"
 #include "Engine.h"
-#include "Utils.h"
+#include "GameObject.h"
+#include "Movable.h"
 #include "Pipe.h"
+#include "Rectangle.h"
+#include "Utils.h"
 
-class Bird : Movable, Drawable
-{
-public:
-  Bird();
-
-  void move(Vector2 delta) override;
-  void draw() override;
+class Bird : GameObject {
+ public:
+  Bird(Vector2 pos, float width, float height, float colliderRadius);
 
   bool OnCollision(const Pipe& pipe) const;
   bool IsFinished(Pipe& pipe);
@@ -20,12 +18,13 @@ public:
 
   void update(float dt);
   void Jump();
-private:
+
+ private:
   float _velocityY = 0.0f;
   const float _gravity = 750.0f;
   const float _jumpForce = 350.0f;
-  const float _terminalVelocity = 500.0f;;
+  const float _terminalVelocity = 500.0f;
+  ;
 
-  Rectangle _body;
+  // Rectangle _body;
 };
-

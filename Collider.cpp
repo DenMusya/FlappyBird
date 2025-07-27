@@ -2,13 +2,43 @@
 
 #include <algorithm>
 
+#include "GameObject.h"
+
 //
 // BaseCollider
 //
 
-void Collider::BaseCollider::SetGameObject(
-    std::shared_ptr<GameObject> gameObject) {
-  _gameObject = gameObject;
+bool Collider::CheckCollision(const GameObject& obj1, const GameObject& obj2) {
+  if (ProcessCollisionRecursion(obj1, obj2)) {
+    return true;
+  }
+
+  for (const auto& child : obj1.GetChilds()) {
+    if (CheckCollision(*child, obj2)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool Collider::ProcessCollisionRecursion(const GameObject& obj1,
+                                         const GameObject& obj2) {
+  BaseCollider* collider1 = obj1.GetComponent<BaseCollider>();
+
+  BaseCollider* collider2 = obj2.GetComponent<BaseCollider>();
+
+  if (collider1 && collider2 && collider1->Intersects(*collider2)) {
+    return true;
+  }
+
+  for (const auto& child : obj2.GetChilds()) {
+    if (ProcessCollisionRecursion(obj1, *child)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 //
@@ -18,12 +48,32 @@ void Collider::BaseCollider::SetGameObject(
 Collider::CircleCollider::CircleCollider(float radius) : _radius(radius) {}
 
 bool Collider::CircleCollider::Intersects(const BaseCollider& other) const {
-  return other.IntersectsWithCircle(*this);
+  if (auto circle = dynamic_cast<const CircleCollider*>(&other)) {
+    return this->IntersectsWithCircle(*circle);
+  }
+  if (auto box = dynamic_cast<const BoxCollider*>(&other)) {
+    return this->IntersectsWithBox(*box);
+  }
+
+  return false;
 }
 
 bool Collider::CircleCollider::IntersectsWithBox(
     const BoxCollider& other) const {
-  return other.IntersectsWithCircle(*this);
+  Vector2 centre = GetCentre();
+  float radius = GetRadius();
+
+  Vector2 pos = other.GetPos();
+  float width = other.GetWidth();
+  float height = other.GetHeight();
+
+  float closestX = std::clamp(centre.x, pos.x, pos.x + width);
+  float closestY = std::clamp(centre.y, pos.y, pos.y + height);
+
+  float dx = closestX - centre.x;
+  float dy = closestY - centre.y;
+
+  return dx * dx + dy * dy <= radius * radius;
 }
 
 bool Collider::CircleCollider::IntersectsWithCircle(
@@ -40,8 +90,8 @@ bool Collider::CircleCollider::IntersectsWithCircle(
 }
 
 Vector2 Collider::CircleCollider::GetCentre() const {
-  return _gameObject->GetPos() +
-         0.5f * Vector2{_gameObject->GetWidth(), _gameObject->GetHeight()};
+  return GetOwner()->GetGlobalPos() +
+         0.5f * Vector2{GetOwner()->GetWidth(), GetOwner()->GetHeight()};
 }
 
 float Collider::CircleCollider::GetRadius() const { return _radius; }
@@ -51,7 +101,14 @@ float Collider::CircleCollider::GetRadius() const { return _radius; }
 //
 
 bool Collider::BoxCollider::Intersects(const BaseCollider& other) const {
-  return other.IntersectsWithBox(*this);
+  if (auto circle = dynamic_cast<const CircleCollider*>(&other)) {
+    return this->IntersectsWithCircle(*circle);
+  }
+  if (auto box = dynamic_cast<const BoxCollider*>(&other)) {
+    return this->IntersectsWithBox(*box);
+  }
+
+  return false;
 }
 
 bool Collider::BoxCollider::IntersectsWithBox(const BoxCollider& other) const {
@@ -97,12 +154,12 @@ bool Collider::BoxCollider::IntersectsWithCircle(
   return dx * dx + dy * dy <= radius * radius;
 }
 
-Vector2 Collider::BoxCollider::GetPos() const { return _gameObject->GetPos(); }
-
-float Collider::BoxCollider::GetWidth() const {
-  return _gameObject->GetWidth();
+Vector2 Collider::BoxCollider::GetPos() const {
+  return GetOwner()->GetGlobalPos();
 }
 
+float Collider::BoxCollider::GetWidth() const { return GetOwner()->GetWidth(); }
+
 float Collider::BoxCollider::GetHeight() const {
-  return _gameObject->GetHeight();
+  return GetOwner()->GetHeight();
 }

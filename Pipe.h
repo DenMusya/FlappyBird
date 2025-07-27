@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Rectangle.h"
+#include "GameObject.h"
 
-class Pipe : Drawable, Movable {
-public:
-  Pipe(Vector2 pivot, int32_t distanceBetween, int32_t width, int32_t height, uint32_t color);
+class Pipe : GameObject {
+ public:
+  Pipe(Vector2 pivot, float distanceBetween, float width, float height);
 
   void draw() override;
   void move(Vector2 delta) override;
@@ -17,9 +17,6 @@ public:
   bool IsFinished() const;
   void Finish();
 
-private:
-  Rectangle _upperRect;
-  Rectangle _lowerRect;
-
+ private:
   bool _finished = false;
 };
