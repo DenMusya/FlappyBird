@@ -145,9 +145,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Movable.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PipeSpawner.h" />
@@ -159,9 +161,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bird.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PipeSpawner.cpp" />
     <ClCompile Include="Rectangle.cpp" />
