@@ -1,17 +1,25 @@
-#include "Utils.h"
 
 #include <windows.h>
 
+#undef max
+#undef min
+
 #include <algorithm>
+#include <numbers>
 #include <string>
 
 #include "../core/Engine.h"
+#include "../graphics/Color.h"
+#include "Utils.h"
 
 void DebugLog(const std::string& message) {
   OutputDebugStringA(message.c_str());
-  OutputDebugStringA("\n");  // перенос строки
+  OutputDebugStringA("\n");
 }
 
+float ToRadians(float degree) { return std::numbers::pi * degree / 180.0f; }
+
+uint32_t backBuffer[SCREEN_HEIGHT][SCREEN_WIDTH] = {0};
 bool freeze = false;
 void FreezeGame() { freeze = true; }
 
@@ -24,6 +32,33 @@ void ColorPixel(int32_t x, int32_t y, uint32_t color) {
 void FillBuffer(uint32_t color) {
   for (int i = 0; i < SCREEN_HEIGHT; ++i) {
     std::fill(std::begin(buffer[i]), std::end(buffer[i]), color);
+  }
+}
+
+void DrawBack() {
+  for (int i = 0; i < SCREEN_HEIGHT; ++i) {
+    std::copy(std::begin(backBuffer[i]), std::end(backBuffer[i]),
+              std::begin(buffer[i]));
+  }
+}
+
+uint8_t Lerp(uint8_t a, uint8_t b, float t) { return a + t * (b - a); }
+
+void FillBufferGradient(Color c1, Color c2) {
+  float mxDist = SCREEN_HEIGHT * SCREEN_HEIGHT + SCREEN_WIDTH * SCREEN_WIDTH;
+
+  for (uint32_t y = 0; y < SCREEN_HEIGHT; ++y) {
+    for (uint32_t x = 0; x < SCREEN_WIDTH; ++x) {
+      float t = (x * x + y * y) / mxDist;
+      t *= 5;
+      if (t > 1) {
+        t = 1;
+      }
+      uint32_t color = (Lerp(c1.r, c2.r, t) << 16) |
+                       (Lerp(c1.g, c2.g, t) << 8) | Lerp(c1.b, c2.b, t);
+
+      backBuffer[y][x] = color;
+    }
   }
 }
 

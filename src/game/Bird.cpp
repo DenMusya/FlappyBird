@@ -36,6 +36,16 @@ void Bird::Update(float dt) {
     _velocityY = _terminalVelocity;
   }
 
+  auto curAngle = GetGlobalTransform().angle;
+  if (curAngle - _velocityY * _rotateSpeed * dt > _terminalTopRotation) {
+    Rotate(_terminalTopRotation - curAngle);
+  } else if (curAngle - _velocityY * _rotateSpeed * dt <
+             _terminalDownRotation) {
+    Rotate(_terminalDownRotation - curAngle);
+  } else {
+    Rotate(-_velocityY * _rotateSpeed * dt);
+  }
+
   Move(Vector2{0, _velocityY * dt});
 }
 

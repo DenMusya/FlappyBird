@@ -29,6 +29,7 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
 
   void Move(Vector2 vec);
   void SetPosition(Vector2 pos, PivotType pivot = PivotType::TopLeft);
+
   void Rotate(float angle);
   void Scale(float scale);
   void ScaleX(float scaleX);

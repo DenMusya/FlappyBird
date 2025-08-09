@@ -26,6 +26,10 @@
     <ClCompile Include="src\game\GameObject.cpp" />
     <ClCompile Include="src\game\Pipe.cpp" />
     <ClCompile Include="src\game\PipeSpawner.cpp" />
+    <ClCompile Include="src\graphics\background\Background.cpp" />
+    <ClCompile Include="src\graphics\background\Ground.cpp" />
+    <ClCompile Include="src\graphics\background\Mountains.cpp" />
+    <ClCompile Include="src\graphics\background\Sky.cpp" />
     <ClCompile Include="src\graphics\Color.cpp" />
     <ClCompile Include="src\graphics\RenderManager.cpp" />
     <ClCompile Include="src\graphics\Sprite.cpp" />
@@ -46,6 +50,10 @@
     <ClInclude Include="src\game\GameObject.h" />
     <ClInclude Include="src\game\Pipe.h" />
     <ClInclude Include="src\game\PipeSpawner.h" />
+    <ClInclude Include="src\graphics\background\Background.h" />
+    <ClInclude Include="src\graphics\background\Ground.h" />
+    <ClInclude Include="src\graphics\background\Mountains.h" />
+    <ClInclude Include="src\graphics\background\Sky.h" />
     <ClInclude Include="src\graphics\Color.h" />
     <ClInclude Include="src\graphics\RenderManager.h" />
     <ClInclude Include="src\graphics\Sprite.h" />

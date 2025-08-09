@@ -23,17 +23,13 @@
 #include <queue>
 #include <string>
 
+#include "../graphics/Color.h"
 #include "../graphics/RenderManager.h"
 #include "../graphics/Sprite.h"
 #include "../physics/ColliderManager.h"
 #include "../utils/Timer.h"
 #include "Bird.h"
 #include "PipeSpawner.h"
-
-// void DebugLog(const std::string& message) {
-//   OutputDebugStringA(message.c_str());
-//   OutputDebugStringA("\n");  // перенос строки
-// }
 
 std::shared_ptr<Bird> bird;
 
@@ -44,6 +40,7 @@ Timer timer;
 
 // initialize game data in this function
 void initialize() {
+  FillBufferGradient(Color(0xB6C02FFF), Color(0x5178ecFF));
   bird = GameObject::Create<Bird>(Vector2{64, 64}, Vector2::Zero);
   bird->Scale(1.5f);
   bird->SetPosition(Vector2{SCREEN_WIDTH, SCREEN_HEIGHT} * 0.5f,
@@ -56,8 +53,8 @@ void initialize() {
 // dt - time elapsed since the previous update (in seconds)
 
 void act(float dt) {
+  if (is_key_pressed(VK_TAB)) freeze = !freeze;
   if (freeze) return;
-  bird->Rotate(dt);
   timer.AddTime(dt);
   bird->Update(dt);
   for (auto& pipe : pipes) {
@@ -87,9 +84,9 @@ void act(float dt) {
 // uint32_t buffer[SCREEN_HEIGHT][SCREEN_WIDTH] - is an array of 32-bit colors
 // (8 bits per R, G, B)
 void draw() {
-  FillBuffer(0xFF0000);
+  DrawBack();
   RenderManager::RenderAll();
-  ColliderManager::DrawColliders();
+  // ColliderManager::DrawColliders();
 }
 
 // free game data in this function
