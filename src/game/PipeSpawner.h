@@ -1,20 +1,27 @@
 #pragma once
 #include <memory>
+#include <span>
 
+#include "../utils/Config.h"
+#include "../utils/Timer.h"
 #include "../utils/Utils.h"
 #include "Pipe.h"
 
 class PipeSpawner : public GameObject {
  public:
-  std::shared_ptr<Pipe> SpawnPipe();
-  const float TimeToNewPipe = 2.0f;
+  PipeSpawner(const PipeSpawnerConfig& spawnerConfig,
+              const PipeConfig& PipeConfig);
+
+  void Update(float dt);
+
+  std::span<std::shared_ptr<Pipe>> GetPipes();
 
  private:
-  static const int32_t PipeWidth = 100;
-  static const int32_t PipeHeight = 600;
-  static const int32_t DistanceBetweenPipes = 200;
-  static const int32_t RandomLowerBound = -300;
-  static const int32_t RandomUpperBound = 300;
+  std::shared_ptr<Pipe> SpawnPipe();
 
-  static const Vector2 Pivot;
+  const PipeConfig PipePreset;
+  const PipeSpawnerConfig SpawnerConfig;
+
+  std::vector<std::shared_ptr<Pipe>> _pipes;
+  Timer _timer;
 };

@@ -5,10 +5,14 @@
 #include "../graphics/Visuals.h"
 #include "../physics/Collider.h"
 
-Bird::Bird(Vector2 size, Vector2 pos) : GameObject(size, pos) {
-  AddComponent<Sprite>(Vector2u(size), Visuals::Bird);
-  AddComponent<Collider::EllipseCollider>(_rightDistance, _upperDistance,
-                                          size * 0.5f, FreezeGame);
+Bird::Bird(const BirdConfig& config) : GameObject(config.size), Config(config) {
+  AddComponent<Sprite>(Vector2u(Config.size), Visuals::Bird);
+  AddComponent<Collider::EllipseCollider>(Config.colliderRadiusX,
+                                          Config.colliderRadiusY,
+                                          Config.size * 0.5f, FreezeGame);
+
+  Scale(config.scale);
+  SetPosition(config.beginPosition, PivotType::Center);
 }
 
 // bool Bird::IsFinished(Pipe& pipe) {
@@ -30,23 +34,24 @@ bool Bird::OutMap() {
 }
 
 void Bird::Update(float dt) {
-  _velocityY += _gravity * dt;
+  _velocityY += Config.gravity * dt;
 
-  if (_velocityY > _terminalVelocity) {
-    _velocityY = _terminalVelocity;
+  if (_velocityY > Config.terminalVelocity) {
+    _velocityY = Config.terminalVelocity;
   }
 
   auto curAngle = GetGlobalTransform().angle;
-  if (curAngle - _velocityY * _rotateSpeed * dt > _terminalTopRotation) {
-    Rotate(_terminalTopRotation - curAngle);
-  } else if (curAngle - _velocityY * _rotateSpeed * dt <
-             _terminalDownRotation) {
-    Rotate(_terminalDownRotation - curAngle);
+  if (curAngle - _velocityY * Config.rotateSpeed * dt >
+      Config.terminalTopAngle) {
+    Rotate(Config.terminalTopAngle - curAngle);
+  } else if (curAngle - _velocityY * Config.rotateSpeed * dt <
+             Config.terminalDownAngle) {
+    Rotate(Config.terminalDownAngle - curAngle);
   } else {
-    Rotate(-_velocityY * _rotateSpeed * dt);
+    Rotate(-_velocityY * Config.rotateSpeed * dt);
   }
 
   Move(Vector2{0, _velocityY * dt});
 }
 
-void Bird::Jump() { _velocityY = -_jumpForce; }
+void Bird::Jump() { _velocityY = -Config.jumpForce; }

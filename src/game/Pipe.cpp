@@ -5,17 +5,21 @@
 #include "../graphics/Visuals.h"
 #include "../physics/Collider.h"
 
-Pipe::Pipe(Vector2 size, Vector2 pos, float distanceBetween)
-    : GameObject(size + Vector2{0, size.y + distanceBetween}, pos) {
-  std::shared_ptr<GameObject> upperPipe = GameObject::Create<GameObject>(size);
+Pipe::Pipe(Vector2 pos, const PipeConfig& config)
+    : GameObject(
+          config.size + Vector2{0, config.size.y + config.distanceBetweenPipes},
+          pos),
+      Config(config) {
+  std::shared_ptr<GameObject> upperPipe =
+      GameObject::Create<GameObject>(Config.size);
   std::shared_ptr<GameObject> lowerPipe = GameObject::Create<GameObject>(
-      size, Vector2{0, size.y + distanceBetween});
+      Config.size, Vector2{0, Config.size.y + Config.distanceBetweenPipes});
 
-  upperPipe->AddComponent<Sprite>(Vector2u(size), Visuals::Pipe);
-  lowerPipe->AddComponent<Sprite>(Vector2u(size), Visuals::Pipe);
+  upperPipe->AddComponent<Sprite>(Vector2u(Config.size), Visuals::Pipe);
+  lowerPipe->AddComponent<Sprite>(Vector2u(Config.size), Visuals::Pipe);
 
-  upperPipe->AddComponent<Collider::BoxCollider>(size);
-  lowerPipe->AddComponent<Collider::BoxCollider>(size);
+  upperPipe->AddComponent<Collider::BoxCollider>(Config.size);
+  lowerPipe->AddComponent<Collider::BoxCollider>(Config.size);
 
   AddChild(upperPipe);
   AddChild(lowerPipe);
@@ -29,4 +33,4 @@ bool Pipe::IsFinished() const { return _finished; }
 
 void Pipe::Finish() { _finished = true; }
 
-void Pipe::Update(float dt) { Move(Vector2{-dt * Speed, 0}); }
+void Pipe::Update(float dt) { Move(Vector2{-dt * Config.speed, 0}); }

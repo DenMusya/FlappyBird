@@ -96,6 +96,12 @@
     <ClCompile Include="src\graphics\background\Sky.cpp">
       <Filter>src\graphics\background</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\FrameBuffer.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Config.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -163,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="src\graphics\background\Sky.h">
       <Filter>src\graphics\background</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\FrameBuffer.h">
+      <Filter>src\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Config.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

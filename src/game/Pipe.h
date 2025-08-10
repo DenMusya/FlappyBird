@@ -1,9 +1,10 @@
 #pragma once
+#include "../utils/Config.h"
 #include "GameObject.h"
 
 class Pipe : public GameObject {
  public:
-  Pipe(Vector2 size, Vector2 pos, float distanceBetween);
+  Pipe(Vector2 pos, const PipeConfig& config);
 
   bool Disappeared() const;
   bool IsFinished() const;
@@ -11,6 +12,6 @@ class Pipe : public GameObject {
   void Update(float dt);
 
  private:
+  const PipeConfig Config;
   bool _finished = false;
-  const float Speed = 300.0f;
 };

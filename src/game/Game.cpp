@@ -27,26 +27,21 @@
 #include "../graphics/RenderManager.h"
 #include "../graphics/Sprite.h"
 #include "../physics/ColliderManager.h"
+#include "../utils/Config.h"
 #include "../utils/Timer.h"
 #include "Bird.h"
 #include "PipeSpawner.h"
 
 std::shared_ptr<Bird> bird;
-
 std::shared_ptr<PipeSpawner> pipeSpawner;
-std::vector<std::shared_ptr<Pipe>> pipes;
-std::shared_ptr<Pipe> pipe;
-Timer timer;
 
 // initialize game data in this function
 void initialize() {
   FillBufferGradient(Color(0xB6C02FFF), Color(0x5178ecFF));
-  bird = GameObject::Create<Bird>(Vector2{64, 64}, Vector2::Zero);
-  bird->Scale(1.5f);
-  bird->SetPosition(Vector2{SCREEN_WIDTH, SCREEN_HEIGHT} * 0.5f,
-                    PivotType::Center);
+  bird = GameObject::Create<Bird>(g_config.bird);
 
-  pipeSpawner = GameObject::Create<PipeSpawner>();
+  pipeSpawner =
+      GameObject::Create<PipeSpawner>(g_config.pipeSpawner, g_config.pipe);
 }
 
 // this function is called to update game data,
@@ -55,21 +50,10 @@ void initialize() {
 void act(float dt) {
   if (is_key_pressed(VK_TAB)) freeze = !freeze;
   if (freeze) return;
-  timer.AddTime(dt);
   bird->Update(dt);
-  for (auto& pipe : pipes) {
+  pipeSpawner->Update(dt);
+  for (auto& pipe : pipeSpawner->GetPipes()) {
     pipe->Update(dt);
-  }
-
-  if (timer.ElapsedTime() > pipeSpawner->TimeToNewPipe) {
-    timer.Reset();
-    pipes.push_back(pipeSpawner->SpawnPipe());
-
-    // DebugLog(std::to_string(pipes.size()));
-  }
-
-  if (!pipes.empty() && pipes.front()->Disappeared()) {
-    pipes.erase(pipes.begin());
   }
 
   if (is_key_pressed(VK_SPACE)) bird->Jump();

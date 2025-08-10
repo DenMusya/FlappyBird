@@ -2,17 +2,24 @@
 
 #include <algorithm>
 
-Color::Color(uint32_t color) {
-  r = (color >> 24u) & 0xFFu;
-  g = (color >> 16u) & 0xFFu;
-  b = (color >> 8u) & 0xFFu;
-  a = color & 0xFFu;
+Color::Color(uint32_t color, ColorFormat format) {
+  if (format == ColorFormat::RGBA) {
+    r = (color >> 24u) & 0xFFu;
+    g = (color >> 16u) & 0xFFu;
+    b = (color >> 8u) & 0xFFu;
+    a = color & 0xFFu;
+  } else if (format == ColorFormat::ARGB) {
+    a = (color >> 24u) & 0xFFu;
+    r = (color >> 16u) & 0xFFu;
+    g = (color >> 8u) & 0xFFu;
+    b = color & 0xFFu;
+  }
 }
 
 Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
     : r(r), g(g), b(b), a(a) {}
 
-uint32_t Color::GetRGB() const { return (r << 16) | (g << 8) | b; }
+uint32_t Color::GetARGB() const { return (a << 24) | (r << 16) | (g << 8) | b; }
 
 bool Color::IsTransparent() const { return a == 0; }
 

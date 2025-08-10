@@ -4,11 +4,11 @@
 
 #include "../core/Engine.h"
 #include "../game/GameObject.h"
+#include "Color.h"
 #include "RenderManager.h"
 
 Sprite::Sprite(Vector2u size, const uint32_t* sprite)
     : _size(size), _sprite(sprite) {}
-#include "Color.h"
 
 void Sprite::Draw() {
   Transform transform = GetOwner()->GetGlobalTransform();
@@ -72,7 +72,7 @@ void Sprite::Draw() {
             (1 - dx) * dy * c01.a + dx * dy * c11.a);
 
         if (!newColor.IsTransparent()) {
-          ColorPixel(roundf(pos.x + x), roundf(y + pos.y), newColor.GetRGB());
+          ColorPixel(roundf(pos.x + x), roundf(y + pos.y), newColor.GetARGB());
         }
       }
     }
