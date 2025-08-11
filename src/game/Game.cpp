@@ -73,7 +73,6 @@ void HandleInput() {
 void act(float dt) {
   HandleInput();
   InputManager::Get().Update(dt);
-  // if (is_key_pressed(VK_TAB)) freeze = !freeze;
   if (freeze) return;
   g_state.bird->Update(dt);
   g_state.pipeSpawner->Update(dt);
@@ -85,8 +84,6 @@ void act(float dt) {
       *(g_state.scoreText) = "Score: " + std::to_string(g_state.currentScore);
     }
   }
-
-  // if (is_key_pressed(VK_SPACE)) g_state.bird->Jump();
 
   if (g_state.bird->OutMap()) schedule_quit_game();
 

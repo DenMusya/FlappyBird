@@ -27,7 +27,6 @@
     <ClCompile Include="src\game\GameObject.cpp" />
     <ClCompile Include="src\game\Pipe.cpp" />
     <ClCompile Include="src\game\PipeSpawner.cpp" />
-    <ClCompile Include="src\game\Player.cpp" />
     <ClCompile Include="src\game\Text.cpp" />
     <ClCompile Include="src\graphics\background\Background.cpp" />
     <ClCompile Include="src\graphics\background\Ground.cpp" />
@@ -56,7 +55,6 @@
     <ClInclude Include="src\game\GameObject.h" />
     <ClInclude Include="src\game\Pipe.h" />
     <ClInclude Include="src\game\PipeSpawner.h" />
-    <ClInclude Include="src\game\Player.h" />
     <ClInclude Include="src\game\Text.h" />
     <ClInclude Include="src\graphics\background\Background.h" />
     <ClInclude Include="src\graphics\background\Ground.h" />
