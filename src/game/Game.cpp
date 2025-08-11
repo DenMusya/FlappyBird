@@ -70,25 +70,47 @@ void HandleInput() {
   }
 }
 
-void act(float dt) {
-  HandleInput();
-  InputManager::Get().Update(dt);
-  if (freeze) return;
-  g_state.bird->Update(dt);
-  g_state.pipeSpawner->Update(dt);
+void UpdateScore() {
+  g_state.currentScore += 1;
+  *(g_state.scoreText) = "Score: " + std::to_string(g_state.currentScore);
+}
+
+void ProcessPipes() {
   for (auto& pipe : g_state.pipeSpawner->GetPipes()) {
-    pipe->Update(dt);
     if (g_state.bird->IsFinished(*pipe) && !pipe->IsFinished()) {
       pipe->Finish();
-      g_state.currentScore += 1;
-      *(g_state.scoreText) = "Score: " + std::to_string(g_state.currentScore);
+      UpdateScore();
     }
   }
+}
 
-  if (g_state.bird->OutMap()) schedule_quit_game();
+void UpdateGameState(float dt) {
+  InputManager::Get().Update(dt);
 
+  if (freeze) return;
+
+  g_state.bird->Update(dt);
+  g_state.pipeSpawner->Update(dt);
+
+  if (g_state.bird->OutMap()) {
+    schedule_quit_game();
+  }
+
+  for (auto& pipe : g_state.pipeSpawner->GetPipes()) {
+    pipe->Update(dt);
+  }
+}
+
+void UpdateCollisions() {
   ColliderManager::UpdateColliders();
   ColliderManager::CheckCollisions();
+}
+
+void act(float dt) {
+  HandleInput();
+  UpdateGameState(dt);
+  ProcessPipes();
+  UpdateCollisions();
 }
 
 void draw() {

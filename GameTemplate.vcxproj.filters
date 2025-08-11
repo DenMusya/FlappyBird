@@ -189,4 +189,9 @@
       <Filter>src\core</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
 </Project>
