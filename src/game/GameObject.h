@@ -59,7 +59,7 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
 
  protected:
   GameObject() = default;
-  GameObject(Vector2 size, Vector2 pos = Vector2::Zero);
+  explicit GameObject(Vector2 size, Vector2 pos = Vector2::Zero);
   void Init();
   std::weak_ptr<GameObject> _parent;
 

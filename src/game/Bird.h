@@ -4,6 +4,7 @@
 #include "../utils/Config.h"
 #include "../utils/Utils.h"
 #include "GameObject.h"
+#include "Pipe.h"
 
 class Bird : public GameObject {
  private:
@@ -13,8 +14,8 @@ class Bird : public GameObject {
  public:
   Bird(const BirdConfig& config);
 
-  // bool IsFinished(Pipe& pipe);
-  bool OutMap();
+  bool IsFinished(const Pipe& pipe) const;
+  bool OutMap() const;
 
   void Update(float dt);
   void Jump();

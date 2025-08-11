@@ -15,18 +15,16 @@ Bird::Bird(const BirdConfig& config) : GameObject(config.size), Config(config) {
   SetPosition(config.beginPosition, PivotType::Center);
 }
 
-// bool Bird::IsFinished(Pipe& pipe) {
-//   if (pipe.IsFinished()) return false;
-//
-//   if (GetGlobalPos().x > pipe.GetGlobalPos().x + pipe.GetWidth()) {
-//     pipe.Finish();
-//     return true;
-//   }
-//
-//   return false;
-// }
+bool Bird::IsFinished(const Pipe& pipe) const {
+  if (GetGlobalTransform().position.x >
+      pipe.GetGlobalTransform().position.x + pipe.GetSize().x) {
+    return true;
+  }
 
-bool Bird::OutMap() {
+  return false;
+}
+
+bool Bird::OutMap() const {
   auto transform = GetGlobalTransform();
   auto size = GetSize();
   return transform.position.y > SCREEN_HEIGHT ||

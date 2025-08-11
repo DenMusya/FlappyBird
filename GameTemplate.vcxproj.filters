@@ -102,6 +102,15 @@
     <ClCompile Include="src\utils\Config.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\Text.cpp">
+      <Filter>src\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\Player.cpp">
+      <Filter>src\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\InputManager.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Component.h">
@@ -175,6 +184,15 @@
     </ClInclude>
     <ClInclude Include="src\utils\Config.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\Text.h">
+      <Filter>src\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\Player.h">
+      <Filter>src\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\InputManager.h">
+      <Filter>src\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

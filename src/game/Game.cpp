@@ -23,6 +23,7 @@
 #include <queue>
 #include <string>
 
+#include "../core/InputManager.h"
 #include "../graphics/Color.h"
 #include "../graphics/RenderManager.h"
 #include "../graphics/Sprite.h"
@@ -31,47 +32,73 @@
 #include "../utils/Timer.h"
 #include "Bird.h"
 #include "PipeSpawner.h"
+#include "Text.h"
 
-std::shared_ptr<Bird> bird;
-std::shared_ptr<PipeSpawner> pipeSpawner;
+namespace {
 
-// initialize game data in this function
+struct GameState {
+  std::shared_ptr<Bird> bird;
+  std::shared_ptr<PipeSpawner> pipeSpawner;
+  std::shared_ptr<Text> scoreText;
+
+  uint32_t currentScore = 0;
+};
+
+GameState g_state;
+}  // namespace
+
 void initialize() {
   FillBufferGradient(Color(0xB6C02FFF), Color(0x5178ecFF));
-  bird = GameObject::Create<Bird>(g_config.bird);
-
-  pipeSpawner =
+  g_state.bird = GameObject::Create<Bird>(g_config.bird);
+  g_state.pipeSpawner =
       GameObject::Create<PipeSpawner>(g_config.pipeSpawner, g_config.pipe);
+  g_state.scoreText =
+      GameObject::Create<Text>(g_config.scoreConfig, "Score: 0");
 }
 
-// this function is called to update game data,
-// dt - time elapsed since the previous update (in seconds)
+void HandleInput() {
+  InputManager& input = InputManager::Get();
 
-void act(float dt) {
-  if (is_key_pressed(VK_TAB)) freeze = !freeze;
-  if (freeze) return;
-  bird->Update(dt);
-  pipeSpawner->Update(dt);
-  for (auto& pipe : pipeSpawner->GetPipes()) {
-    pipe->Update(dt);
+  if (input.IsKeyPressed(VK_ESCAPE)) {
+    schedule_quit_game();
   }
 
-  if (is_key_pressed(VK_SPACE)) bird->Jump();
+  if (input.IsKeyPressed(VK_TAB, 0.2f)) freeze = !freeze;
 
-  if (is_key_pressed(VK_ESCAPE) || bird->OutMap()) schedule_quit_game();
+  if (input.IsKeyPressed(VK_SPACE)) {
+    g_state.bird->Jump();
+  }
+}
+
+void act(float dt) {
+  HandleInput();
+  InputManager::Get().Update(dt);
+  // if (is_key_pressed(VK_TAB)) freeze = !freeze;
+  if (freeze) return;
+  g_state.bird->Update(dt);
+  g_state.pipeSpawner->Update(dt);
+  for (auto& pipe : g_state.pipeSpawner->GetPipes()) {
+    pipe->Update(dt);
+    if (g_state.bird->IsFinished(*pipe) && !pipe->IsFinished()) {
+      pipe->Finish();
+      g_state.currentScore += 1;
+      *(g_state.scoreText) = "Score: " + std::to_string(g_state.currentScore);
+    }
+  }
+
+  // if (is_key_pressed(VK_SPACE)) g_state.bird->Jump();
+
+  if (g_state.bird->OutMap()) schedule_quit_game();
 
   ColliderManager::UpdateColliders();
   ColliderManager::CheckCollisions();
 }
 
-// fill buffer in this function
-// uint32_t buffer[SCREEN_HEIGHT][SCREEN_WIDTH] - is an array of 32-bit colors
-// (8 bits per R, G, B)
 void draw() {
   DrawBack();
   RenderManager::RenderAll();
+  g_state.scoreText->Draw();
   // ColliderManager::DrawColliders();
 }
 
-// free game data in this function
 void finalize() {}

@@ -13,6 +13,11 @@ Color::Color(uint32_t color, ColorFormat format) {
     r = (color >> 16u) & 0xFFu;
     g = (color >> 8u) & 0xFFu;
     b = color & 0xFFu;
+  } else {
+    r = 0;
+    g = 0;
+    b = 0;
+    a = 0;
   }
 }
 
@@ -37,3 +42,5 @@ Color Color::Lerp(const Color& color1, const Color& color2, float t) {
   return Color(mn_r + t * (mx_r - mn_r), mn_g + t * (mx_g - mn_g),
                mn_b + t * (mx_b - mn_b), mn_a + t * (mx_a - mn_a));
 }
+
+const Color Color::Black(0xFF000000, ColorFormat::ARGB);

@@ -21,11 +21,14 @@
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp" />
     <ClCompile Include="src\core\Engine.cpp" />
+    <ClCompile Include="src\core\InputManager.cpp" />
     <ClCompile Include="src\game\Bird.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
     <ClCompile Include="src\game\GameObject.cpp" />
     <ClCompile Include="src\game\Pipe.cpp" />
     <ClCompile Include="src\game\PipeSpawner.cpp" />
+    <ClCompile Include="src\game\Player.cpp" />
+    <ClCompile Include="src\game\Text.cpp" />
     <ClCompile Include="src\graphics\background\Background.cpp" />
     <ClCompile Include="src\graphics\background\Ground.cpp" />
     <ClCompile Include="src\graphics\background\Mountains.cpp" />
@@ -48,10 +51,13 @@
   <ItemGroup>
     <ClInclude Include="src\core\Component.h" />
     <ClInclude Include="src\core\Engine.h" />
+    <ClInclude Include="src\core\InputManager.h" />
     <ClInclude Include="src\game\Bird.h" />
     <ClInclude Include="src\game\GameObject.h" />
     <ClInclude Include="src\game\Pipe.h" />
     <ClInclude Include="src\game\PipeSpawner.h" />
+    <ClInclude Include="src\game\Player.h" />
+    <ClInclude Include="src\game\Text.h" />
     <ClInclude Include="src\graphics\background\Background.h" />
     <ClInclude Include="src\graphics\background\Ground.h" />
     <ClInclude Include="src\graphics\background\Mountains.h" />

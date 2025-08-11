@@ -18,4 +18,6 @@ struct Color {
   bool IsTransparent() const;
 
   static Color Lerp(const Color& color1, const Color& color2, float t);
+
+  static const Color Black;
 };
