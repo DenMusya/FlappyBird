@@ -13,13 +13,15 @@ Sprite::Sprite(const std::string& path) {
 
   _size = Vector2u{uint32_t(data.w), uint32_t(data.h)};
   _sprite = data.data;
+  _borders = data.borders;
 }
 
 Vector2u Sprite::GetSize() const { return _size; }
 
 void Sprite::Draw() {
   Transform transform = GetOwner()->GetGlobalTransform();
-  if (transform.angle == 0.0f && transform.scale.x == 1 &&
+
+  if (transform.angle == 0 && transform.scale.x == 1 &&
       transform.scale.y == 1) {
     FastDraw();
     return;
@@ -96,18 +98,24 @@ void Sprite::FastDraw() {
   int endY = std::min(pos.y + _size.y, float(SCREEN_HEIGHT));
   if (startX >= endX || startY >= endY) return;
 
-  int copyWidth = endX - startX;
-
   for (int y = startY; y < endY; ++y) {
     int srcY = y - pos.y;
-    int srcX = startX - pos.x;
+    for (int i = 0; i < _borders[srcY].size(); ++i) {
+      startX = std::max(pos.x + _borders[srcY][i].x, 0.0f);
+      endX = std::min(pos.x + _borders[srcY][i].y, float(SCREEN_WIDTH));
+      if (startX >= endX) continue;
 
-    uint32_t* dest = buffer[y] + startX;
-    uint32_t* src = _sprite + (srcY * _size.x + srcX);
+      int copyWidth = endX - startX;
+      int srcX = startX - pos.x;
 
-    memcpy(dest, src, copyWidth * sizeof(uint32_t));
+      uint32_t* dest = buffer[y] + startX;
+      uint32_t* src = _sprite + (srcY * _size.x + srcX);
+
+      memcpy(dest, src, copyWidth * sizeof(uint32_t));
+    }
   }
 }
+
 Color Sprite::GetColor(int x, int y) {
   if (x >= _size.x || y >= _size.y) {
     return Color();

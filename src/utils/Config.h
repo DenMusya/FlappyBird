@@ -60,6 +60,7 @@ struct Config {
   PipeSpawnerConfig pipeSpawner;
   TextConfig scoreConfig;
   BackgroundConfig background;
+  TextConfig fpsConfig;
 };
 
 extern Config g_config;

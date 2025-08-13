@@ -4,4 +4,5 @@ Controls:
 
 Space - Jump
 Tab - Pause
+Shift - Restart
 Esc - Exit

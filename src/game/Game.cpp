@@ -42,6 +42,7 @@ struct GameState {
   std::shared_ptr<Bird> bird;
   std::shared_ptr<PipeSpawner> pipeSpawner;
   std::shared_ptr<Text> scoreText;
+  std::shared_ptr<Text> fpsText;
 
   uint32_t currentScore = 0;
 };
@@ -65,6 +66,7 @@ void initialize() {
       GameObject::Create<PipeSpawner>(g_config.pipeSpawner, g_config.pipe);
   g_state.scoreText =
       GameObject::Create<Text>(g_config.scoreConfig, "Score: 0");
+  g_state.fpsText = GameObject::Create<Text>(g_config.fpsConfig, "");
 }
 
 void HandleInput() {
@@ -99,6 +101,9 @@ void ProcessPipes() {
   }
 }
 
+Timer timer;
+float timeFps = 0.25f;
+
 void UpdateGameState(float dt) {
   InputManager::Get().Update(dt);
 
@@ -106,6 +111,11 @@ void UpdateGameState(float dt) {
   g_state.background->Update(dt);
   g_state.bird->Update(dt);
   g_state.pipeSpawner->Update(dt);
+  timer.AddTime(dt);
+  if (timer.ElapsedTime() > timeFps) {
+    timer.Reset();
+    (*g_state.fpsText) = "FPS: " + std::to_string(int(1 / dt));
+  }
 
   if (g_state.bird->OutMap()) {
     schedule_quit_game();
@@ -132,6 +142,7 @@ void draw() {
   DrawBack();
   RenderManager::RenderAll();
   g_state.scoreText->Draw();
+  g_state.fpsText->Draw();
   // ColliderManager::DrawColliders();
 }
 

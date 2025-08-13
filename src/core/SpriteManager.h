@@ -2,6 +2,9 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
+
+#include "../utils/Utils.h"
 
 class SpriteManager {
  public:
@@ -9,6 +12,8 @@ class SpriteManager {
     uint32_t* data;
     int w;
     int h;
+
+    std::vector<Vector2>* borders;
   };
   static SpriteManager& Get();
 

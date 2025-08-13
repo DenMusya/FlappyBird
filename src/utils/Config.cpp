@@ -6,7 +6,8 @@ Config g_config{
      "Resources/Bird.png", "Resources/Bird.png"},
     {Vector2{100.0f, 600.0f}, 300.0f, 200.0f, "Resources/Pipe.png"},
     {2.0f, -300.0f, 300.0f},
-    {Vector2::Zero, 3.0f, Color::Black, Vector2u{5, 7}},
-    {80.0f, 4u, "Resources/bg2.png"}
+    {Vector2{2.0f, 2.0f}, 3.0f, Color::Black, Vector2u{5, 7}},
+    {80.0f, 4u, "Resources/bg2.png"},
+    {Vector2{2, SCREEN_HEIGHT - 23}, 3.0f, Color::Black, Vector2u{5, 7}}
 
 };

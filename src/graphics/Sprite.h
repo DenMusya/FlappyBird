@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "../core/Component.h"
 #include "../utils/Utils.h"
@@ -24,5 +25,5 @@ class Sprite : public Component {
   Sprite() = delete;
   Vector2u _size = Vector2u::Zero;
   uint32_t* _sprite;
-  // unsigned char* _sprite = nullptr;
+  std::vector<Vector2>* _borders;
 };
