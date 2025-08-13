@@ -43,4 +43,4 @@ Color Color::Lerp(const Color& color1, const Color& color2, float t) {
                mn_b + t * (mx_b - mn_b), mn_a + t * (mx_a - mn_a));
 }
 
-const Color Color::Black(0xFF000000, ColorFormat::ARGB);
+const Color Color::Black(0xFF);

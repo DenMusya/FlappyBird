@@ -6,7 +6,7 @@
 #include "../physics/Collider.h"
 
 Bird::Bird(const BirdConfig& config) : GameObject(config.size), Config(config) {
-  AddComponent<Sprite>(Vector2u(Config.size), Visuals::Bird);
+  AddComponent<Sprite>(Config.baseSpritePath);
   AddComponent<Collider::EllipseCollider>(Config.colliderRadiusX,
                                           Config.colliderRadiusY,
                                           Config.size * 0.5f, FreezeGame);
@@ -53,3 +53,9 @@ void Bird::Update(float dt) {
 }
 
 void Bird::Jump() { _velocityY = -Config.jumpForce; }
+
+void Bird::Reset() {
+  SetRotation(0);
+  SetPosition(Config.beginPosition, PivotType::Center);
+  _velocityY = 0.0f;
+}

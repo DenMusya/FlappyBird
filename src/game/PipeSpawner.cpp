@@ -18,6 +18,11 @@ std::shared_ptr<Pipe> PipeSpawner::SpawnPipe() {
   return GameObject::Create<Pipe>(Vector2{x, y}, PipePreset);
 }
 
+void PipeSpawner::ClearPipes() {
+  _pipes.clear();
+  _timer.Reset();
+}
+
 void PipeSpawner::Update(float dt) {
   if (!_pipes.empty() && _pipes.front()->Disappeared()) {
     _pipes.erase(_pipes.begin());

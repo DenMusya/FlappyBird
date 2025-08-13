@@ -29,6 +29,8 @@ void GameObject::ScaleY(float scale) {
   SetPosition(center, PivotType::Center);
 }
 
+void GameObject::SetRotation(float angle) { _transform.angle = angle; }
+
 void GameObject::AddChild(std::shared_ptr<GameObject> child) {
   _childs.push_back(child);
   _cacheValid = false;

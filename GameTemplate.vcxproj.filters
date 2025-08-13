@@ -22,9 +22,6 @@
     <Filter Include="src\physics\colliders">
       <UniqueIdentifier>{edfb317e-1603-40c3-afa1-972aa607fb45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\graphics\background">
-      <UniqueIdentifier>{351365b1-e0a7-456e-b057-7e54b58da9e4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\Component.cpp">
@@ -84,18 +81,6 @@
     <ClCompile Include="src\physics\colliders\PolygonCollider.cpp">
       <Filter>src\physics\colliders</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\background\Background.cpp">
-      <Filter>src\graphics\background</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\background\Ground.cpp">
-      <Filter>src\graphics\background</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\background\Mountains.cpp">
-      <Filter>src\graphics\background</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\background\Sky.cpp">
-      <Filter>src\graphics\background</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\FrameBuffer.cpp">
       <Filter>src\graphics</Filter>
     </ClCompile>
@@ -107,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="src\core\InputManager.cpp">
       <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\SpriteManager.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\Background.cpp">
+      <Filter>src\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,18 +155,6 @@
     <ClInclude Include="src\physics\colliders\PolygonCollider.h">
       <Filter>src\physics\colliders</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\background\Background.h">
-      <Filter>src\graphics\background</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\background\Ground.h">
-      <Filter>src\graphics\background</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\background\Mountains.h">
-      <Filter>src\graphics\background</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\background\Sky.h">
-      <Filter>src\graphics\background</Filter>
-    </ClInclude>
     <ClInclude Include="src\graphics\FrameBuffer.h">
       <Filter>src\graphics</Filter>
     </ClInclude>
@@ -187,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="src\core\InputManager.h">
       <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\SpriteManager.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\stb_image.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\Background.h">
+      <Filter>src\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

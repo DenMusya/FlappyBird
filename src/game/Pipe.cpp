@@ -15,8 +15,8 @@ Pipe::Pipe(Vector2 pos, const PipeConfig& config)
   std::shared_ptr<GameObject> lowerPipe = GameObject::Create<GameObject>(
       Config.size, Vector2{0, Config.size.y + Config.distanceBetweenPipes});
 
-  upperPipe->AddComponent<Sprite>(Vector2u(Config.size), Visuals::Pipe);
-  lowerPipe->AddComponent<Sprite>(Vector2u(Config.size), Visuals::Pipe);
+  upperPipe->AddComponent<Sprite>(config.spritePath);
+  lowerPipe->AddComponent<Sprite>(config.spritePath);
 
   upperPipe->AddComponent<Collider::BoxCollider>(Config.size);
   lowerPipe->AddComponent<Collider::BoxCollider>(Config.size);

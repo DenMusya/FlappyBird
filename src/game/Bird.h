@@ -17,6 +17,7 @@ class Bird : public GameObject {
   bool IsFinished(const Pipe& pipe) const;
   bool OutMap() const;
 
+  void Reset();
   void Update(float dt);
   void Jump();
 };

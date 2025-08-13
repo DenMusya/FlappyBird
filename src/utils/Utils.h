@@ -31,6 +31,7 @@ struct Vector2 {
   float x;
   float y;
 
+  Vector2() = default;
   Vector2(float x, float y);
   explicit Vector2(Vector2u v);
 
@@ -48,6 +49,7 @@ struct Vector2u {
   uint32_t x;
   uint32_t y;
 
+  Vector2u() = default;
   Vector2u(uint32_t x, uint32_t y);
   explicit Vector2u(Vector2 v);
 

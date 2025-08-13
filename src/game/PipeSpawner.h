@@ -13,7 +13,7 @@ class PipeSpawner : public GameObject {
               const PipeConfig& PipeConfig);
 
   void Update(float dt);
-
+  void ClearPipes();
   std::span<std::shared_ptr<Pipe>> GetPipes();
 
  private:

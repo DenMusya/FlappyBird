@@ -29,6 +29,7 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
 
   void Move(Vector2 vec);
   void SetPosition(Vector2 pos, PivotType pivot = PivotType::TopLeft);
+  void SetRotation(float angle);
 
   void Rotate(float angle);
   void Scale(float scale);
@@ -52,7 +53,7 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
   void SetSize(Vector2 size);
 
   template <typename T, typename... Args>
-  void AddComponent(Args&&... args);
+  T* AddComponent(Args&&... args);
 
   template <typename T>
   T* GetComponent() const;
@@ -84,17 +85,14 @@ T* GameObject::GetComponent() const {
 }
 
 template <typename T, typename... Args>
-void GameObject::AddComponent(Args&&... args) {
+T* GameObject::AddComponent(Args&&... args) {
   static_assert(std::is_base_of_v<Component, T>,
                 "T must inherit from Component");
 
-  if (GetComponent<T>()) {
-    return;
-  }
-
   auto ptr = Component::Create<T>(std::forward<Args>(args)...);
-  // ptr->SetOwner(shared_from_this());
   _components.push_back(ptr);
+
+  return ptr.get();
 }
 
 template <typename Derived, typename... Args>

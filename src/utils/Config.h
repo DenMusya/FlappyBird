@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include "../graphics/Color.h"
 #include "Utils.h"
 
@@ -18,6 +20,9 @@ struct BirdConfig {
   float colliderRadiusY;
 
   float scale;
+
+  std::string baseSpritePath;
+  std::string deadSpritePath;
 };
 
 struct PipeConfig {
@@ -25,6 +30,8 @@ struct PipeConfig {
   float speed;
 
   float distanceBetweenPipes;
+
+  std::string spritePath;
 };
 
 struct PipeSpawnerConfig {
@@ -41,11 +48,18 @@ struct TextConfig {
   Vector2u symbolSize;
 };
 
+struct BackgroundConfig {
+  float speed;
+  uint32_t spriteDuplicates;
+  std::string spritePath;
+};
+
 struct Config {
   BirdConfig bird;
   PipeConfig pipe;
   PipeSpawnerConfig pipeSpawner;
   TextConfig scoreConfig;
+  BackgroundConfig background;
 };
 
 extern Config g_config;

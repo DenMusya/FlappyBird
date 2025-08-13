@@ -30,6 +30,7 @@
 #include "../physics/ColliderManager.h"
 #include "../utils/Config.h"
 #include "../utils/Timer.h"
+#include "Background.h"
 #include "Bird.h"
 #include "PipeSpawner.h"
 #include "Text.h"
@@ -37,6 +38,7 @@
 namespace {
 
 struct GameState {
+  std::shared_ptr<Background> background;
   std::shared_ptr<Bird> bird;
   std::shared_ptr<PipeSpawner> pipeSpawner;
   std::shared_ptr<Text> scoreText;
@@ -47,8 +49,17 @@ struct GameState {
 GameState g_state;
 }  // namespace
 
+void ResetGame() {
+  g_state.bird->Reset();
+  g_state.pipeSpawner->ClearPipes();
+  g_state.currentScore = 0;
+  (*g_state.scoreText) = "Score: 0";
+  freeze = true;
+}
+
 void initialize() {
-  FillBufferGradient(Color(0xB6C02FFF), Color(0x5178ecFF));
+  // FillBufferGradient(Color(0xB6C02FFF), Color(0x5178ecFF));
+  g_state.background = GameObject::Create<Background>(g_config.background);
   g_state.bird = GameObject::Create<Bird>(g_config.bird);
   g_state.pipeSpawner =
       GameObject::Create<PipeSpawner>(g_config.pipeSpawner, g_config.pipe);
@@ -67,6 +78,10 @@ void HandleInput() {
 
   if (input.IsKeyPressed(VK_SPACE)) {
     g_state.bird->Jump();
+  }
+
+  if (input.IsKeyPressed(VK_SHIFT)) {
+    ResetGame();
   }
 }
 
@@ -88,7 +103,7 @@ void UpdateGameState(float dt) {
   InputManager::Get().Update(dt);
 
   if (freeze) return;
-
+  g_state.background->Update(dt);
   g_state.bird->Update(dt);
   g_state.pipeSpawner->Update(dt);
 

@@ -15,6 +15,13 @@ class Component {
   template <typename Derived, typename... Args>
   static std::shared_ptr<Derived> Create(Args&&... args);
 
+  bool IsActive() const;
+  void Activate();
+  void Disactivate();
+
+ protected:
+  bool _isActive = true;
+
  private:
   std::weak_ptr<GameObject> _owner;
 };

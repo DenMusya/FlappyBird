@@ -3,16 +3,27 @@
 #include <cassert>
 
 #include "../core/Engine.h"
+#include "../core/SpriteManager.h"
 #include "../game/GameObject.h"
 #include "Color.h"
 #include "RenderManager.h"
 
-Sprite::Sprite(Vector2u size, const uint32_t* sprite)
-    : _size(size), _sprite(sprite) {}
+Sprite::Sprite(const std::string& path) {
+  SpriteManager::Image data = SpriteManager::Get().Load(path.c_str());
+
+  _size = Vector2u{uint32_t(data.w), uint32_t(data.h)};
+  _sprite = data.data;
+}
+
+Vector2u Sprite::GetSize() const { return _size; }
 
 void Sprite::Draw() {
   Transform transform = GetOwner()->GetGlobalTransform();
-
+  if (transform.angle == 0.0f && transform.scale.x == 1 &&
+      transform.scale.y == 1) {
+    FastDraw();
+    return;
+  }
   Vector2 center = 0.5 * Vector2{_size};
   Vector2 pos = transform.position;
   Vector2 scale = transform.scale;
@@ -45,13 +56,11 @@ void Sprite::Draw() {
       float dx = rotX - x0;
       float dy = rotY - y0;
 
-      // Проверка границ
       if (x0 >= 0 && y0 >= 0 && x1 <= width && y1 <= height) {
-        // Извлекаем цвета (RGB)
-        Color c00 = _sprite[y0 * width + x0];
-        Color c01 = _sprite[y1 * width + x0];
-        Color c10 = _sprite[y0 * width + x1];
-        Color c11 = _sprite[y1 * width + x1];
+        Color c00 = GetColor(x0, y0);
+        Color c01 = GetColor(x0, y1);
+        Color c10 = GetColor(x1, y0);
+        Color c11 = GetColor(x1, y1);
 
         Color newColor;
         // Интерполяция
@@ -79,6 +88,33 @@ void Sprite::Draw() {
   }
 }
 
-Sprite::~Sprite() { RenderManager::UnregisterSprite(this); }
+void Sprite::FastDraw() {
+  Vector2 pos = GetOwner()->GetGlobalTransform().position;
+  int startX = std::max(pos.x, 0.0f);
+  int startY = std::max(pos.y, 0.0f);
+  int endX = std::min(pos.x + _size.x, float(SCREEN_WIDTH));
+  int endY = std::min(pos.y + _size.y, float(SCREEN_HEIGHT));
+  if (startX >= endX || startY >= endY) return;
+
+  int copyWidth = endX - startX;
+
+  for (int y = startY; y < endY; ++y) {
+    int srcY = y - pos.y;
+    int srcX = startX - pos.x;
+
+    uint32_t* dest = buffer[y] + startX;
+    uint32_t* src = _sprite + (srcY * _size.x + srcX);
+
+    memcpy(dest, src, copyWidth * sizeof(uint32_t));
+  }
+}
+Color Sprite::GetColor(int x, int y) {
+  if (x >= _size.x || y >= _size.y) {
+    return Color();
+  }
+  return Color(_sprite[x + y * _size.x], ColorFormat::ARGB);
+}
 
 void Sprite::Init() { RenderManager::RegisterSprite(this); }
+
+Sprite::~Sprite() { RenderManager::UnregisterSprite(this); }
