@@ -43,6 +43,7 @@ struct GameState {
   std::shared_ptr<PipeSpawner> pipeSpawner;
   std::shared_ptr<Text> scoreText;
   std::shared_ptr<Text> fpsText;
+  std::shared_ptr<Text> settingsText;
 
   uint32_t currentScore = 0;
 };
@@ -59,14 +60,21 @@ void ResetGame() {
 }
 
 void initialize() {
-  // FillBufferGradient(Color(0xB6C02FFF), Color(0x5178ecFF));
   g_state.background = GameObject::Create<Background>(g_config.background);
   g_state.bird = GameObject::Create<Bird>(g_config.bird);
   g_state.pipeSpawner =
       GameObject::Create<PipeSpawner>(g_config.pipeSpawner, g_config.pipe);
-  g_state.scoreText =
-      GameObject::Create<Text>(g_config.scoreConfig, "Score: 0");
-  g_state.fpsText = GameObject::Create<Text>(g_config.fpsConfig, "");
+  g_state.scoreText = GameObject::Create<Text>(g_config.text, "Score: 0");
+  g_state.fpsText = GameObject::Create<Text>(g_config.text, "");
+  g_state.settingsText = GameObject::Create<Text>(
+      g_config.text, "Space: Jump\nTab: pause\nShift: restart game\n");
+
+  g_state.settingsText->Scale(0.5);
+  g_state.settingsText->SetPosition(
+      Vector2{SCREEN_WIDTH - 165, SCREEN_HEIGHT - 50});
+
+  g_state.scoreText->SetPosition(Vector2{2, 2});
+  g_state.fpsText->SetPosition(Vector2{2, SCREEN_HEIGHT - 23});
 }
 
 void HandleInput() {
@@ -106,19 +114,20 @@ float timeFps = 0.25f;
 
 void UpdateGameState(float dt) {
   InputManager::Get().Update(dt);
-
-  if (freeze) return;
-  g_state.background->Update(dt);
-  g_state.bird->Update(dt);
-  g_state.pipeSpawner->Update(dt);
   timer.AddTime(dt);
   if (timer.ElapsedTime() > timeFps) {
     timer.Reset();
     (*g_state.fpsText) = "FPS: " + std::to_string(int(1 / dt));
   }
 
+  if (freeze) return;
+  g_state.bird->Update(dt);
+  if (g_state.bird->IsDead()) return;
+  g_state.background->Update(dt);
+  g_state.pipeSpawner->Update(dt);
+
   if (g_state.bird->OutMap()) {
-    schedule_quit_game();
+    g_state.bird->OnDead();
   }
 
   for (auto& pipe : g_state.pipeSpawner->GetPipes()) {
@@ -127,6 +136,7 @@ void UpdateGameState(float dt) {
 }
 
 void UpdateCollisions() {
+  if (g_state.bird->IsDead()) return;
   ColliderManager::UpdateColliders();
   ColliderManager::CheckCollisions();
 }
@@ -139,10 +149,10 @@ void act(float dt) {
 }
 
 void draw() {
-  DrawBack();
   RenderManager::RenderAll();
   g_state.scoreText->Draw();
   g_state.fpsText->Draw();
+  g_state.settingsText->Draw();
   // ColliderManager::DrawColliders();
 }
 

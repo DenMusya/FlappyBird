@@ -15,11 +15,8 @@ void FreezeGame();
 
 void ColorPixel(int32_t x, int32_t y, uint32_t color);
 void FillBuffer(uint32_t color);
-void DrawBack();
+float RandomFloat(float x, float y);
 
-extern uint32_t backBuffer[SCREEN_HEIGHT][SCREEN_WIDTH];
-
-void FillBufferGradient(Color color1, Color color2);
 uint8_t Lerp(uint8_t a, uint8_t b, float t);
 
 void DebugLog(const std::string& message);

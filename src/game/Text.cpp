@@ -34,6 +34,11 @@ void Text::Draw() {
   Transform tranform = GetGlobalTransform();
   Vector2 pos = tranform.position;
   for (char c : _str) {
+    if (c == '\n') {
+      pos.x = tranform.position.x;
+      pos += tranform.scale * Vector2{0, Config.symbolSize.y + 3.0f};
+      continue;
+    }
     DrawChar(pos, c, tranform.scale);
     if (c == ':' || c == ' ') {  // TODO
       pos += tranform.scale * Vector2{Config.symbolSize.x + 1.0f, 0} * 0.5f;

@@ -8,7 +8,9 @@ std::vector<Sprite*> RenderManager::_sprites;
 
 void RenderManager::RenderAll() {
   for (auto& sprite : _sprites) {
-    sprite->Draw();
+    if (sprite->IsActive()) {
+      sprite->Draw();
+    }
   }
 }
 
